@@ -8,23 +8,35 @@
                     <!--<td v-for="contorColumns in 4"></td>-->
                 <!--</tr>-->
             <!--</table>-->
-            <div class=" grid-row" v-for="rows in 4">
-                <div class=" grid-cell" v-for="columns in 4">  </div>
+            <div class=" grid-row" v-for="rows in matrix">
+                <div class=" grid-cell" v-for="columns in rows">
+
+                    <app-cell v-if="columns !== 0" :value="columns"></app-cell>
+
+                </div>
             </div>
         </div>
+
 
     </div>
 </template>
 
 <script>
+    import Cell from './Cell.vue';
+
     export default {
         data: function() {
             return {
-                windowHeight: 0
+                windowHeight: 0,
+                matrix: [
+                    [0,2,0,0],
+                    [0,0,4,0],
+                    [0,0,0,0],
+                    [0,0,0,0],
+                ]
             }
         },
         methods: {
-
             getWindowHeight(event) {
                 this.windowHeight = this.$refs.board.clientWidth;
                 this.$refs.board.setAttribute("style", "height: " + this.windowHeight + "px");
@@ -37,13 +49,16 @@
                 this.$refs.board.setAttribute("style", "height: " + this.$refs.board.clientWidth + "px");
 
                 window.addEventListener('resize', this.getWindowHeight);
-
+                console.log(this);
                 //Init
                 this.getWindowHeight();
             })
         },
         beforeDestroy() {
             window.removeEventListener('resize', this.getWindowHeight);
+        },
+        components: {
+            appCell: Cell
         }
 
 
