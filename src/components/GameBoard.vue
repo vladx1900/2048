@@ -3,11 +3,7 @@
 
 
         <div class="" id="board" ref="board">
-            <!--<table id="board-table">-->
-                <!--<tr v-for="contorRows in 4">-->
-                    <!--<td v-for="contorColumns in 4"></td>-->
-                <!--</tr>-->
-            <!--</table>-->
+
             <div class=" grid-row" v-for="rows in matrix">
                 <div class=" grid-cell" v-for="columns in rows">
 
@@ -15,6 +11,7 @@
 
                 </div>
             </div>
+
         </div>
 
 
@@ -25,23 +22,29 @@
     import Cell from './Cell.vue';
 
     export default {
+        props: ['matrix'],
         data: function() {
             return {
-                windowHeight: 0,
-                matrix: [
-                    [0,2,0,0],
-                    [0,0,4,0],
-                    [0,0,0,0],
-                    [0,0,0,0],
-                ]
+                windowHeight: 0
             }
         },
         methods: {
             getWindowHeight(event) {
                 this.windowHeight = this.$refs.board.clientWidth;
                 this.$refs.board.setAttribute("style", "height: " + this.windowHeight + "px");
+            },
+            matrixChanged() {
+
+                //this.$emit('marixChanged', this.matrix);
             }
 
+        },
+        computed: {
+            matrixWasChanged() {
+                console.log("comp");
+
+                return this.matrix;
+            }
         },
         mounted: function () {
             this.$nextTick(function () {
@@ -49,7 +52,7 @@
                 this.$refs.board.setAttribute("style", "height: " + this.$refs.board.clientWidth + "px");
 
                 window.addEventListener('resize', this.getWindowHeight);
-                console.log(this);
+
                 //Init
                 this.getWindowHeight();
             })

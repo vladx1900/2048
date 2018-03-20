@@ -4,6 +4,9 @@
 
 ## Build Setup
 
+## Install NPM 
+# https://nodejs.org/en/download/
+
 ``` bash
 # install dependencies
 npm install
