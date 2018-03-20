@@ -1,16 +1,16 @@
 <template>
     <div class="row" id="header">
 
-        <div class="col-xs-6 text-center shadow">
+        <div class=" col-lg-6 text-center shadow">
             <span data-shadow-text="Text-Shadow">2048</span>
         </div>
 
-        <div class="col-xs-2 text-center score-panel">
+        <div class=" col-lg-2 text-center score-panel">
             <p>Best score</p>
             <h4>123456</h4>
         </div>
 
-        <div class="col-xs-2 text-center score-panel">
+        <div class=" col-lg-2 text-center score-panel">
             <p>Score</p>
             <h4>123456</h4>
         </div>
