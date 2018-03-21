@@ -32,10 +32,6 @@
             getWindowHeight(event) {
                 this.windowHeight = this.$refs.board.clientWidth;
                 this.$refs.board.setAttribute("style", "height: " + this.windowHeight + "px");
-            },
-            matrixChanged() {
-
-                //this.$emit('marixChanged', this.matrix);
             }
 
         },
