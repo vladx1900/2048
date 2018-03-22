@@ -59,8 +59,6 @@ export default {
                 console.log(5);
                 return;
         }
-
-        this.newCellNeeded();
     },
     newCellNeeded() {
         let intermediarMatrix = this.buildIntermediarMatrix();
@@ -112,22 +110,24 @@ export default {
         return intermediarMatrix;
     },
     arrowUpCase() {
-        let mirror =  [
+        var mirror =  [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0],
         ];
 
-        let intermediarMatrix = this.buildIntermediarMatrix();
-        let ok = '';
+        var intermediarMatrix = this.buildIntermediarMatrix();
+        var ok;
+        var m;
+        var contor;
         console.log(intermediarMatrix);
-        for(let j=0;j<4;++j) {
-            for (let i = 1; i < 4; ++i) {
-                if (intermediarMatrix[i][j] !== 0) {
-                    let m = i - 1;
+        for(var j=0;j<4;j++) {
+            for (contor = 1; contor < 4; contor++) {
+                if (intermediarMatrix[contor][j] !== 0) {
+                    m = contor - 1;
 
-                    while (intermediarMatrix[m][j] === 0 && m >= 0) {
+                    while (m >= 0 && intermediarMatrix[m][j] === 0) {
                         intermediarMatrix[m][j] = intermediarMatrix[m + 1][j];
                         intermediarMatrix[m + 1][j] = 0;
                         m--;

@@ -37,6 +37,7 @@
         border-radius: 3px;
         color: white;
         margin-right: 10px;
+        width: auto;
     }
 
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="row text-center">
+    <div class="row">
 
 
         <div class="" id="board" ref="board">
@@ -31,16 +31,13 @@
         methods: {
             getWindowHeight(event) {
                 this.windowHeight = this.$refs.board.clientWidth;
+
                 this.$refs.board.setAttribute("style", "height: " + this.windowHeight + "px");
             }
 
         },
         computed: {
-            matrixWasChanged() {
-                console.log("comp");
 
-                return this.matrix;
-            }
         },
         mounted: function () {
             this.$nextTick(function () {
