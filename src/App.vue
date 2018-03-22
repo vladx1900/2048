@@ -38,25 +38,21 @@ export default {
   methods: {
 
     addNewCell(event) {
-        // if (event.key !== "ArrowRight" && event.key !== "ArrowLeft" && event.key !== "ArrowUp" && event.key !== "ArrowDown") {
-        //     return;
-        // }
 
         switch (event.key) {
             case "ArrowUp":
                 this.arrowUpCase();
                 break;
             case "ArrowDown":
-                console.log(2);
+                this.arrowDownCase();
                 break;
             case "ArrowRight":
-                console.log(3);
+                this.arrowRightCase();
                 break;
             case "ArrowLeft":
-                console.log(4);
+                this.arrowLeftCase();
                 break;
             default:
-                console.log(5);
                 return;
         }
     },
@@ -78,7 +74,9 @@ export default {
         this.column = Math.ceil(Math.random()*4) -1;
     },
     getRandomTwoOrFour() {
-        return (Math.ceil(Math.random()*2)) * 2;
+        var value = Math.random() < 0.9 ? 2 : 4;
+        console.log(value);
+        return value;
     },
     fullMatrix() {
         var state = true;
@@ -120,12 +118,13 @@ export default {
         var intermediarMatrix = this.buildIntermediarMatrix();
         var ok;
         var m;
-        var contor;
-        console.log(intermediarMatrix);
-        for(var j=0;j<4;j++) {
-            for (contor = 1; contor < 4; contor++) {
-                if (intermediarMatrix[contor][j] !== 0) {
-                    m = contor - 1;
+        var i;
+        var j;
+
+        for( j=0;j<4;j++) {
+            for (i = 1; i < 4; i++) {
+                if (intermediarMatrix[i][j] !== 0) {
+                    m = i - 1;
 
                     while (m >= 0 && intermediarMatrix[m][j] === 0) {
                         intermediarMatrix[m][j] = intermediarMatrix[m + 1][j];
@@ -137,6 +136,129 @@ export default {
                         intermediarMatrix[m][j] = intermediarMatrix[m][j] + intermediarMatrix[m + 1][j];
                         intermediarMatrix[m + 1][j] = 0;
                         mirror[m][j] = 1;
+                        ok = 1;
+                    }
+                }
+            }
+        }
+
+        this.matrix = intermediarMatrix;
+
+        if(ok === 1) {
+            this.newCellNeeded();
+        }
+
+    },
+    arrowDownCase() {
+        var mirror =  [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ];
+
+        var intermediarMatrix = this.buildIntermediarMatrix();
+        var ok;
+        var m;
+        var i;
+        var j;
+
+        for(j=0;j<4;j++) {
+            for (i = 2; i >= 0; i--) {
+                if (intermediarMatrix[i][j] !== 0) {
+
+                    m = i + 1;
+                    while (m <= 3 && intermediarMatrix[m][j] === 0) {
+                        console.log(m, j);
+                        intermediarMatrix[m][j] = intermediarMatrix[m-1][j];
+                        intermediarMatrix[m-1][j] = 0;
+                        m++;
+                        ok = 1;
+                    }
+                    if (m  <= 3 && intermediarMatrix[m][j] === intermediarMatrix[m-1][j] && mirror[m][j] !== 1) {
+                        intermediarMatrix[m][j] = intermediarMatrix[m][j] + intermediarMatrix[m-1][j];
+                        intermediarMatrix[m-1][j] = 0;
+                        mirror[m][j] = 1;
+                        ok = 1;
+                    }
+                }
+            }
+        }
+
+        this.matrix = intermediarMatrix;
+
+        if(ok === 1) {
+            this.newCellNeeded();
+        }
+    },
+    arrowRightCase() {
+        var mirror =  [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ];
+
+        var intermediarMatrix = this.buildIntermediarMatrix();
+        var ok;
+        var m;
+        var i;
+        var j;
+
+        for(i=0;i<4;i++) {
+            for (j = 2; j >= 0; j--) {
+                if (intermediarMatrix[i][j] !== 0) {
+                    m = j + 1;
+                    while (m <= 3 && intermediarMatrix[i][m] === 0) {
+                        intermediarMatrix[i][m] = intermediarMatrix[i][m-1];
+                        intermediarMatrix[i][m - 1] = 0;
+                        m++;
+                        ok = 1;
+                    }
+                    if (m <= 3 && intermediarMatrix[i][m] === intermediarMatrix[i][m-1] && mirror[i][m] !== 1) {
+                        intermediarMatrix[i][m] = intermediarMatrix[i][m] + intermediarMatrix[i][m - 1];
+                        intermediarMatrix[i][m - 1] = 0;
+                        mirror[i][m] = 1;
+                        ok = 1;
+                    }
+                }
+            }
+        }
+
+        this.matrix = intermediarMatrix;
+
+        if(ok === 1) {
+            this.newCellNeeded();
+        }
+    },
+    arrowLeftCase() {
+        var mirror =  [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ];
+
+        var intermediarMatrix = this.buildIntermediarMatrix();
+        var ok;
+        var m;
+        var i;
+        var j;
+
+        for(i=0;i<4;i++) {
+            for (j = 1; j <= 3; j++) {
+                if (intermediarMatrix[i][j] !== 0) {
+                    m = j - 1;
+                    while (m >= 0 && intermediarMatrix[i][m] === 0) {
+                        intermediarMatrix[i][m] = intermediarMatrix[i][m + 1];
+                        intermediarMatrix[i][m + 1] = 0;
+                        m--;
+                        ok = 1;
+                    }
+                    if (m >= 0 && intermediarMatrix[i][m] === intermediarMatrix[i][m + 1] && mirror[i][m] !== 1) {
+                        intermediarMatrix[i][m] = intermediarMatrix[i][m] + intermediarMatrix[i][m + 1];
+                        intermediarMatrix[i][m + 1] = 0;
+                        mirror[i][m] = 1;
                         ok = 1;
                     }
                 }
