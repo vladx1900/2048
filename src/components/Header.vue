@@ -7,12 +7,12 @@
 
         <div class=" col-lg-2 text-center score-panel">
             <p>Best score</p>
-            <h4>123456</h4>
+            <h4>{{score}}</h4>
         </div>
 
         <div class=" col-lg-2 text-center score-panel">
             <p>Score</p>
-            <h4>123456</h4>
+            <h4>{{score}}</h4>
         </div>
 
     </div>
@@ -20,7 +20,9 @@
 </template>
 
 <script>
-
+    export default {
+        props: ['score']
+    }
 </script>
 
 <style scoped>
@@ -44,7 +46,7 @@
 
     span, span:after {
         font-weight: 900;
-        color: #efedce;
+        color: black;
         white-space: nowrap;
         letter-spacing: .1em;
         padding: .2em 0 .25em 0;

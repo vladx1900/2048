@@ -1,16 +1,22 @@
 <template>
   <div id="app" class="container">
-    <app-header></app-header>
+    <app-header
+            :score="score"
+            @scoreChanged="score = $event"
+    ></app-header>
 
     <app-new-game
             :matrix="matrix"
             @matrixChanged="matrix = $event"
             ref="newGame"
+            :score="score"
+            @scoreChanged="score = $event"
     ></app-new-game>
 
     <app-game-board
             :matrix="matrix"
             @matrixChanged="matrix = $event"
+            :direction="direction"
     ></app-game-board>
 
   </div>
@@ -32,8 +38,14 @@ export default {
               [0,0,0,0],
           ],
           row: '',
-          column: ''
+          column: '',
+          score: 0,
+          winner: 0,
+          direction: ''
       }
+  },
+  computed: {
+
   },
   methods: {
 
@@ -42,18 +54,29 @@ export default {
         switch (event.key) {
             case "ArrowUp":
                 this.arrowUpCase();
+                this.direction = event.key;
+                //there is a bug/ its seems like the matrix is changed to full after one more key press
                 break;
             case "ArrowDown":
                 this.arrowDownCase();
+                this.direction = event.key;
                 break;
             case "ArrowRight":
                 this.arrowRightCase();
+                this.direction = event.key;
                 break;
             case "ArrowLeft":
                 this.arrowLeftCase();
+                this.direction = event.key;
                 break;
             default:
                 return;
+        }
+
+        if (this.winner) {
+            this.checkWin();
+        } else {
+            this.checkLose();
         }
     },
     newCellNeeded() {
@@ -75,14 +98,13 @@ export default {
     },
     getRandomTwoOrFour() {
         var value = Math.random() < 0.9 ? 2 : 4;
-        console.log(value);
         return value;
     },
     fullMatrix() {
         var state = true;
         dance:
-        for (var i=0; i<this.matrix.length; i++) {
-            for (var j=0; j< this.matrix.length; j++) {
+        for (var i=0; i<4; i++) {
+            for (var j=0; j< 4; j++) {
                 if (this.matrix[i][j] === 0) {
                     state = false;
                     break dance;
@@ -90,6 +112,66 @@ export default {
             }
         }
         return state;
+    },
+    //returns true if there is at least a move, else false
+    canMakeMoves() {
+        var state = false;
+        dance:
+            for (var i=0; i<this.matrix.length; i++) {
+                for (var j=0; j< this.matrix.length; j++) {
+                    //search above
+                    if ((i-1) >= 0) {
+                        if(this.matrix[i][j] === this.matrix[i-1][j]) {
+                            state = true;
+                            break dance;
+                        }
+                    }
+
+                    //search under
+                    if ((i+1) <4 ) {
+                        if(this.matrix[i][j] === this.matrix[i+1][j]) {
+                            state = true;
+                            break dance;
+                        }
+                    }
+
+                    //search right
+                    if ((j+1) <4 ) {
+                        if(this.matrix[i][j] === this.matrix[i][j+1]) {
+                            state = true;
+                            break dance;
+                        }
+                    }
+
+                    //search left
+                    if ((j-1) >= 0) {
+                        if(this.matrix[i][j] === this.matrix[i][j-1]) {
+                            state = true;
+                            break dance;
+                        }
+                    }
+                }
+            }
+        return state;
+    },
+    checkWin() {
+
+          dance:
+          for (var i = 0; i < this.matrix.length; i++) {
+              for (var j = 0; j < this.matrix.length; j++) {
+                  if (this.matrix[i][j] === 2048) {
+                      swal("Congrats! You won!", "You can celebrate or Continue!");
+                      this.winner = 1;
+                      break dance;
+                  }
+              }
+          }
+
+    },
+    checkLose() {
+        if (this.fullMatrix() && !this.canMakeMoves()) {
+            swal("The numbers won the battle!", "Give it another try, starting a new game!")
+        }
     },
     buildIntermediarMatrix() {
         let intermediarMatrix = [
@@ -106,6 +188,9 @@ export default {
         }
 
         return intermediarMatrix;
+    },
+    calculateScore(number) {
+        this.score += number;
     },
     arrowUpCase() {
         var mirror =  [
@@ -137,6 +222,7 @@ export default {
                         intermediarMatrix[m + 1][j] = 0;
                         mirror[m][j] = 1;
                         ok = 1;
+                        this.calculateScore(intermediarMatrix[m][j]);
                     }
                 }
             }
@@ -169,7 +255,6 @@ export default {
 
                     m = i + 1;
                     while (m <= 3 && intermediarMatrix[m][j] === 0) {
-                        console.log(m, j);
                         intermediarMatrix[m][j] = intermediarMatrix[m-1][j];
                         intermediarMatrix[m-1][j] = 0;
                         m++;
@@ -180,6 +265,7 @@ export default {
                         intermediarMatrix[m-1][j] = 0;
                         mirror[m][j] = 1;
                         ok = 1;
+                        this.calculateScore(intermediarMatrix[m][j]);
                     }
                 }
             }
@@ -220,6 +306,7 @@ export default {
                         intermediarMatrix[i][m - 1] = 0;
                         mirror[i][m] = 1;
                         ok = 1;
+                        this.calculateScore(intermediarMatrix[i][m]);
                     }
                 }
             }
@@ -260,6 +347,7 @@ export default {
                         intermediarMatrix[i][m + 1] = 0;
                         mirror[i][m] = 1;
                         ok = 1;
+                        this.calculateScore(intermediarMatrix[i][m]);
                     }
                 }
             }
@@ -281,9 +369,9 @@ export default {
   mounted() {
       this.$refs.newGame.newMatrix();
   },
-    created: function () {
-        window.addEventListener('keyup', this.addNewCell);
-    },
+  created: function () {
+      window.addEventListener('keyup', this.addNewCell);
+  },
 }
 </script>
 

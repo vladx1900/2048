@@ -3,7 +3,7 @@
     <div class="row">
 
         <div class="col-xs-7 text-right">
-            <h4>Join the numbers and get to the <b>2048</b> tile!</h4>
+            <h4>Let's double it! <b>2048</b> challenge!</h4>
         </div>
 
         <div class="col-xs-3 text-center">
@@ -17,7 +17,7 @@
 
 <script>
     export default {
-        props: ['matrix'],
+        props: ['matrix', 'score'],
         data: function () {
             return {
                 row: '',
@@ -39,7 +39,9 @@
                 intermediarMatrix[this.row][this.column] = this.getRandomTwoOrFour();
 
                 this.matrix = intermediarMatrix;
+                this.score = 0;
                 this.$emit('matrixChanged', this.matrix);
+                this.$emit('scoreChanged', this.score);
             },
             getRandomPairData() {
                 this.row = Math.ceil(Math.random()*4) -1;

@@ -7,7 +7,10 @@
             <div class=" grid-row" v-for="rows in matrix">
                 <div class=" grid-cell" v-for="columns in rows">
 
-                    <app-cell v-if="columns !== 0" :value="columns"></app-cell>
+                    <app-cell
+                            v-if="columns !== 0" :value="columns"
+                            :direction="direction"
+                    ></app-cell>
 
                 </div>
             </div>
@@ -22,7 +25,7 @@
     import Cell from './Cell.vue';
 
     export default {
-        props: ['matrix'],
+        props: ['matrix', 'direction'],
         data: function() {
             return {
                 windowHeight: 0
